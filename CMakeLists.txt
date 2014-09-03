@@ -1,0 +1,53 @@
+SET(PROJECT_NAME aggr)
+PROJECT(${PROJECT_NAME})
+CMAKE_MINIMUM_REQUIRED (VERSION 2.8.3)
+SET(CMAKE_BUILD_TYPE RelWithDebInfo) # Release, RelWithDebInfo
+SET(CMAKE_VERBOSE_MAKEFILE OFF)
+SET(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${PROJECT_SOURCE_DIR}/CMakeModules/")
+SET(USE_ROS FALSE) # Set False if you want to build this package without Catkin
+
+# Set build flags. Set IS_ARM on odroid board as environment variable
+SET(CMAKE_CXX_FLAGS "-Wall")
+IF(CMAKE_COMPILER_IS_GNUCC)
+  SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++0x")
+ELSE()
+  SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
+ENDIF()
+
+# Add plain cmake packages 
+FIND_PACKAGE(OpenCV REQUIRED)
+FIND_PACKAGE(Eigen REQUIRED)
+FIND_PACKAGE(Sophus REQUIRED)
+FIND_PACKAGE(Pangolin REQUIRED)
+FIND_PACKAGE(vikit_common REQUIRED)
+
+# Include dirs
+INCLUDE_DIRECTORIES(
+  include
+  ${Eigen_INCLUDE_DIRS}
+  ${OpenCV_INCLUDE_DIRS}
+  ${Sophus_INCLUDE_DIRS}
+  ${Pangolin_INCLUDE_DIRS}
+  ${vikit_common_INCLUDE_DIRS}
+)
+
+SET(LINK_LIBS
+  ${OpenCV_LIBS}
+  ${Sophus_LIBRARIES}
+  ${catkin_LIBRARIES}
+  ${Pangolin_LIBRARIES}
+  ${vikit_common_LIBRARIES}
+)
+
+SET(SOURCE_FILES
+  #
+)
+SET(HEADER_FILES
+  #
+)
+
+SET(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/bin)
+SET(LIBRARY_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/lib)
+
+ADD_EXECUTABLE(main src/main.cpp ${SOURCE_FILES} ${HEADER_FILES})
+TARGET_LINK_LIBRARIES(main ${LINK_LIBS})
